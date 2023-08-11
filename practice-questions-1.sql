@@ -1,6 +1,11 @@
 --Write a SELECT statement that returns three columns from the Vendors table: VendorContactFName, VendorContactLName, and VendorName. Sort the result set by last name, then by first name.
 
-select VendorContactFName, VendorContactLName, VendorName from vendors order by VendorContactLName, VendorContactFName;
+select VendorContactFName, 
+    VendorContactLName, 
+    VendorName 
+from vendors 
+order by VendorContactLName, 
+    VendorContactFName;
 
 
 --Write a SELECT statement that returns four columns from the Invoices table, named Number, Total, Credits, and Balance: Number Total
@@ -11,9 +16,9 @@ select VendorContactFName, VendorContactLName, VendorName from vendors order by 
 --Use the AS keyword to assign column aliase
 
 select InvoiceNumber as 'Number', 
-InvoiceTotal as 'Total', 
-PaymentTotal+CreditTotal as 'credits', 
-InvoiceTotal-(PaymentTotal+CreditTotal) as 'Balance' 
+    InvoiceTotal as 'Total', 
+    PaymentTotal+CreditTotal as 'credits', 
+    InvoiceTotal-(PaymentTotal+CreditTotal) as 'Balance' 
 from Invoices;
 
 
@@ -24,7 +29,9 @@ Format it as follows: last name, comma, first name (for example, “Doe, John”
 Sort the result set by last name, then by first name
 */
 
-select concat(VendorContactLName, ', ', VendorContactFName) from Vendors order by VendorContactLName, VendorContactFName;
+select concat(VendorContactLName, ', ', VendorContactFName) 
+from Vendors 
+order by VendorContactLName, VendorContactFName;
 
 
 /*
@@ -36,8 +43,12 @@ Only return those rows with a balance due greater than 1000.
 Sort the result set by InvoiceTotal, with the largest invoice first.
 */
 
-select InvoiceTotal, invoicetotal*0.1 as '10%', InvoiceTotal + (invoicetotal * 0.1) as 'plus 10%' from Invoices
-WHERE invoicetotal > 1000 order by InvoiceTotal desc;
+select InvoiceTotal, 
+    invoicetotal*0.1 as '10%', 
+    InvoiceTotal + (invoicetotal * 0.1) as 'plus 10%' 
+from Invoices
+WHERE invoicetotal > 1000 
+order by InvoiceTotal desc;
 
 
 /*
@@ -47,10 +58,12 @@ but less than or equal to $10,000.
 
 
 select InvoiceNumber as 'Number', 
-InvoiceTotal as 'Total', 
-PaymentTotal+CreditTotal as 'credits', 
-InvoiceTotal-(PaymentTotal+CreditTotal) as 'Balance' 
-from Invoices WHERE InvoiceTotal >= 500 AND InvoiceTotal <=10000;
+    InvoiceTotal as 'Total', 
+    PaymentTotal+CreditTotal as 'credits', 
+    InvoiceTotal-(PaymentTotal+CreditTotal) as 'Balance' 
+from Invoices 
+WHERE InvoiceTotal >= 500 
+    AND InvoiceTotal <=10000;
 
 /*
 Modify the solution to exercise 3 to filter for contacts whose last name begins with the letter A, B, C, or E (not D).
@@ -59,7 +72,7 @@ Modify the solution to exercise 3 to filter for contacts whose last name begins 
 select concat(VendorContactLName, ', ', VendorContactFName) 
 from Vendors 
 where VendorContactLName like'[a-c, e]%'
-order by VendorContactLName, VendorContactFName
+order by VendorContactLName, VendorContactFName;
 
 
 /*
@@ -68,3 +81,10 @@ Write a SELECT statement that determines whether the PaymentDate column of the I
 Code a compound condition in the WHERE clause that tests for these conditions.
 */
 
+select *
+from Invoices
+where InvoiceTotal-(PaymentTotal+CreditTotal)>0 
+    AND PaymentDate IS NOT NULL
+    OR InvoiceTotal-(PaymentTotal+CreditTotal)<=0 
+    AND PaymentDate IS NULL
+ORDER BY PaymentDate;
