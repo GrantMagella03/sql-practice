@@ -15,9 +15,17 @@ from invoices i
 join vendors v
 on i.vendorid=v.vendorid
 group by v.vendorname
-ORDER BY count(*) desc
+ORDER BY invoicecount desc
 --
-select 
-from invoicelineitems il
-join GLAccounts g
-on
+select gl.accountdescription, Count(*) as "lineitemcount"
+from glaccounts g
+--
+--
+/*
+select vendorid,invoicedate,invoicetotal
+    sum(invoicetotal) over (partition by vendorId) AS 'vendortotal',
+    Count(invoicetotal) over (partition by vendorid) AS 'vendorcount'
+    avg(invoicetotal) over (PARTITION BY vendorid) AS 'test'
+from invoices;
+--^this somehow works for prof but not for me, idk why
+*/
