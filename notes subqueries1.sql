@@ -1,6 +1,6 @@
 select *
 from vendors
 where vendorid in
-(select vendorid
-from vendors
-where defaultaccountno between 400 and 499)
+(select distinct vendorid
+from invoices
+where InvoiceTotal >=100)
