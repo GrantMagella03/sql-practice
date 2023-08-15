@@ -1,0 +1,65 @@
+USE MASTER;
+GO
+DROP DATABASE IF EXISTS GMPRS;
+GO
+CREATE DATABASE GMPRS;
+GO
+USE GMPRS;
+GO
+
+CREATE TABLE Users(
+    ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    Username VARCHAR(30) UNIQUE NOT NULL,
+    Password VARCHAR(30) NOT NULL,
+    Firstname VARCHAR(30) NOT NULL,
+    Lastname VARCHAR(30) NOT NULL,
+    Phone VARCHAR(12) NULL,
+    Email VARCHAR(255) NULL,
+    IsReveiwer BIT NOT NULL,
+    IsAdmin BIT NOT NULL,
+);
+GO
+CREATE TABLE Vendors(
+    ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    Code VARCHAR(30) UNIQUE NOT NULL,
+    Name VARCHAR(30) NOT NULL,
+    Address VARCHAR(30) NOT NULL,
+    City VARCHAR(30) NOT NULL,
+    State VARCHAR(2) NOT NULL,
+    Zip VARCHAR(5) NOT NULL,
+    Phone VARCHAR(12) NULL,
+    Email VARCHAR(255) NULL,
+);
+GO
+CREATE TABLE Products(
+    ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    PartNbr VARCHAR(30) UNIQUE NOT NULL,
+    Name VARCHAR(30) NOT NULL,
+    Price DECIMAL(11,2) NOT NULL,
+    Unit VARCHAR(30) NOT NULL,
+    PhotoPath VARCHAR(255) NULL,
+    VendorID INT NOT NULL FOREIGN KEY REFERENCES Vendors(ID)
+);
+GO
+CREATE TABLE Requests(
+    ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    Description VARCHAR(80) NOT NULL,
+    Justification VARCHAR(80) NOT NULL,
+    RejectionReason VARCHAR(80) NULL,
+    DeliveryMode VARCHAR(20) NOT NULL DEFAULT('Pickup'),
+    Status VARCHAR(10) NOT NULL DEFAULT('New'),
+    Total DECIMAL(11,2) NOT NULL DEFAULT(0),
+    UserID INT NOT NULL FOREIGN KEY REFERENCES Users(ID)
+);
+GO
+CREATE TABLE RequestLine(
+    ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    RequestID INT NOT NULL FOREIGN KEY REFERENCES Requests(ID),
+    ProductID INT NOT NULL FOREIGN KEY REFERENCES Products(ID),
+    Quantity INT NOT NULL DEFAULT(1)
+);
+GO
+INSERT Users(Username,password,Firstname,Lastname,Phone,Email,IsReveiwer,IsAdmin)
+Values      ('GMagella','Grant','Magella','513-888-8698','Gmagella03@gmail.com',0,1),
+            ('SAngharad','Sara','Angharad','513-339-0955',NULL,0,0),
+            (),
