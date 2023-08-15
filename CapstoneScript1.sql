@@ -15,8 +15,8 @@ CREATE TABLE Users(
     Lastname VARCHAR(30) NOT NULL,
     Phone VARCHAR(12) NULL,
     Email VARCHAR(255) NULL,
-    IsReveiwer BIT NOT NULL,
-    IsAdmin BIT NOT NULL,
+    IsReviewer BIT NOT NULL DEFAULT(0),
+    IsAdmin BIT NOT NULL DEFAULT(0),
 );
 GO
 CREATE TABLE Vendors(
@@ -35,8 +35,8 @@ CREATE TABLE Products(
     ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     PartNbr VARCHAR(30) UNIQUE NOT NULL,
     Name VARCHAR(30) NOT NULL,
-    Price DECIMAL(11,2) NOT NULL,
-    Unit VARCHAR(30) NOT NULL,
+    Price DECIMAL(11,2) NOT NULL DEFAULT(1),
+    Unit VARCHAR(30) NOT NULL DEFAULT('Each'),
     PhotoPath VARCHAR(255) NULL,
     VendorID INT NOT NULL FOREIGN KEY REFERENCES Vendors(ID)
 );
@@ -47,19 +47,28 @@ CREATE TABLE Requests(
     Justification VARCHAR(80) NOT NULL,
     RejectionReason VARCHAR(80) NULL,
     DeliveryMode VARCHAR(20) NOT NULL DEFAULT('Pickup'),
-    Status VARCHAR(10) NOT NULL DEFAULT('New'),
+    Status VARCHAR(10) NOT NULL DEFAULT('NEW') CHECK(STATUS IN('NEW','EDIT','REVIEW','APPROVED','REJECTED')),
     Total DECIMAL(11,2) NOT NULL DEFAULT(0),
     UserID INT NOT NULL FOREIGN KEY REFERENCES Users(ID)
 );
 GO
 CREATE TABLE RequestLine(
     ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    RequestID INT NOT NULL FOREIGN KEY REFERENCES Requests(ID),
+    RequestID INT NOT NULL FOREIGN KEY REFERENCES Requests(ID) ON DELETE CASCADE,
     ProductID INT NOT NULL FOREIGN KEY REFERENCES Products(ID),
-    Quantity INT NOT NULL DEFAULT(1)
+    Quantity INT NOT NULL DEFAULT(1) CHECK(Quantity>0)
 );
 GO
-INSERT Users(Username,password,Firstname,Lastname,Phone,Email,IsReveiwer,IsAdmin)
-Values      ('GMagella','Grant','Magella','513-888-8698','Gmagella03@gmail.com',0,1),
-            ('SAngharad','Sara','Angharad','513-339-0955',NULL,0,0),
-            (),
+--Inserts, these need to be changed, these were added to play along in class
+INSERT Users(Username,password,Firstname,Lastname,Phone,Email,IsReviewer,IsAdmin)
+Values('TestAdmin','AdminPass','System','Administrator',null,null,0,1),
+      ('TestReviewer','ReviewPass','Press','Account',null,null,1,0),
+      ('TestUser','UserPass','User','Account','555-555-5555','UserEmail@Domain.com',0,0);
+INSERT Vendors(Code,Name,Address,City,State,Zip,Phone,Email)
+VALUES('AAA111','TestSeller','50 Test Street','Testington','OH','45215',NULL,NULL)
+INSERT Products(PartNbr,Name,VendorID)
+VALUES('10304','Test Part',1)
+INSERT Requests(Description,Justification,Total,UserID)
+VALUES('Test1','Testing',1,1),('Test2','Testing',2,2),('Test3','Testing',3,3)
+INSERT RequestLine(RequestID,ProductID,Quantity)
+VALUES(1,1,1),(1,1,2),(1,1,3);
