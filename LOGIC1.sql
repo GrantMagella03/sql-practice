@@ -1,6 +1,8 @@
 
 BEGIN TRY
-    
+    DECLARE @INDEX INT=1;
+    SET @INDEX+=5
+    RAISERROR('bye',1,1);
 END TRY
 BEGIN CATCH
 
