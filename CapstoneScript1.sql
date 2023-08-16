@@ -65,9 +65,11 @@ Values('TestAdmin','AdminPass','System','Administrator',null,null,0,1),
       ('TestReviewer','ReviewPass','Press','Account',null,null,1,0),
       ('TestUser','UserPass','User','Account','555-555-5555','UserEmail@Domain.com',0,0);
 INSERT Vendors(Code,Name,Address,City,State,Zip,Phone,Email)
-VALUES('AAA111','TestSeller','50 Test Street','Testington','OH','45215',NULL,NULL)
-INSERT Products(PartNbr,Name,VendorID)
-VALUES('10304','Test Part',1)
+VALUES('AAA111','TestSeller','50 Test Street','Testington','OH','45215',NULL,NULL),
+    ('AMZN','Amazon','Various','Various','NA','N/A',NULL,NULL),
+    ('BIC','BIC','Various','Various','NA','N/A',NULL,NULL);
+INSERT Products(PartNbr,Price,Name,VendorID)
+VALUES('10304',1,'Test Part',1),('ECHO',200,'Amazon Echo',2),('ECHODOT',50,'Amazon Echo Dot',2),('ECHOSHOW',100,'Amazon Echo Show',2),('BICPENPACKBASIC',5,'Bic Pen 10 Pack',3)
 INSERT Requests(Description,Justification,Total,UserID)
 VALUES('Test1','Testing',1,1),('Test2','Testing',2,2),('Test3','Testing',3,3)
 INSERT RequestLine(RequestID,ProductID,Quantity)
